@@ -13,7 +13,7 @@ namespace Ui_plugin_set_labels_on_save {
             
             return $(`
                 <div class="panel-body-v-scroll fillHeight">
-                    This is my content : ${settings.content}
+                    This is my content : ${settings.dirtyLabel}
                 </div>
                 `);
         };
