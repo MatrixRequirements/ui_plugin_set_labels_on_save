@@ -12,7 +12,7 @@ namespace Ui_plugin_set_labels_on_save {
             return $(`
         <div class="panel-body-v-scroll fillHeight"> 
             <div class="panel-body">
-                This is my content : ${this.settings.content}
+                This is my content : ${this.settings.dirtyLabel}
             </div>
         </div>
         `);
@@ -24,7 +24,7 @@ namespace Ui_plugin_set_labels_on_save {
             const control = this.getDashboardDOM();
             app.itemForm.append(
                 ml.UI.getPageTitle(
-                    this.settings.content,
+                    this.settings.dirtyLabel,
                     () => {
                         return control;
                     },
