@@ -16,8 +16,8 @@ namespace Ui_plugin_set_labels_on_save {
         fieldParameter: string;
     }
     export interface IProjectSettings {
-        /** Setting for project placeholder */
-        content: string;
+        /** set that label to activate the plugin */
+        dirtyLabel:string; 
     }
 
     // DO NOT MODIFY BELOW un

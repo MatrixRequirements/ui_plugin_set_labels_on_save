@@ -1,8 +1,5 @@
 /// <reference path="api/Matrix.Labels.ts" />
 
-interface IUi_plugin_set_labels_on_saveSetting {
-    dirtyLabel:string; // set that label to activate the plugin
-}
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_set_labels_on_save {
     
@@ -22,11 +19,11 @@ namespace Ui_plugin_set_labels_on_save {
                 helpUrl:"https://docs23.matrixreq.com"
             },
             projectSettingsPage: {
-                id: "U______projectsettings",
-                title:"U_____ projectsettings page",
+                id: "PrpjectSettingSetLabelOnSave",
+                title:"Set Labels on Save",
                 enabled: true,
                 defaultSettings: {
-                    content: "boiler plate",
+                    dirtyLabel: "",
                 },
                 settingName: "SetLabelOnSave",
                 help: "This is my help text",
@@ -76,7 +73,7 @@ namespace Ui_plugin_set_labels_on_save {
         public isDefault = true;
         currentFolder: IItem;
         popupModeOrControl: boolean;
-        public projectSettings:IUi_plugin_set_labels_on_saveSetting;
+        public projectSettings:IProjectSettings;
 
         static PLUGIN_NAME = "<PLUGIN_NAME_PLACEHOLDER>";
         static PLUGIN_VERSION = "<PLUGIN_VERSION_PLACEHOLDER>";
@@ -103,7 +100,7 @@ namespace Ui_plugin_set_labels_on_save {
         initProject(project:string) {
             let that = this;
     
-            that.projectSettings = <IUi_plugin_set_labels_on_saveSetting>IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName);
+            that.projectSettings = <IProjectSettings>IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName);
             if (that.projectSettings && !that.projectSettings.dirtyLabel) {
                 that.projectSettings = null; 
             }
