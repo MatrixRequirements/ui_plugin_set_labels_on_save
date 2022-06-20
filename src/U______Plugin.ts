@@ -80,8 +80,8 @@ namespace Ui_plugin_set_labels_on_save {
 
         constructor() {
             console.debug(`Contructing ${Plugin.PLUGIN_NAME}`);
-            let that = this;
-            MR1.onAfterSave().subscribe( <any>this, function (event:IItemChangeEvent) { 
+            const that = this;// eslint-disable-line
+            MR1.onAfterSave().subscribe( <any>this, function (event:IItemChangeEvent) { // eslint-disable-line
         
                 return that.onAfterSave( event );
             });
@@ -89,7 +89,7 @@ namespace Ui_plugin_set_labels_on_save {
 
 
         private onAfterSave( event:IItemChangeEvent ) {
-            let that = this;
+            const that = this;// eslint-disable-line
     
             if (that.projectSettings) {
                 console.log( event )
@@ -97,8 +97,8 @@ namespace Ui_plugin_set_labels_on_save {
         }
 
 
-        initProject(project:string) {
-            let that = this;
+        initProject(project:string) {// eslint-disable-line
+            const that = this;// eslint-disable-line
     
             that.projectSettings = <IProjectSettings>IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName);
             if (that.projectSettings && !that.projectSettings.dirtyLabel) {
