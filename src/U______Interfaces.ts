@@ -1,6 +1,6 @@
 /* Setting interfaces */
 // eslint-disable-next-line no-unused-vars
-namespace BoilerPlate {
+namespace Ui_plugin_set_labels_on_save {
 
 
     export interface IControlOptions extends IBaseControlOptions{
@@ -11,7 +11,7 @@ namespace BoilerPlate {
         /** Server Setting placeholder */
         content: string;
     }
-    export interface IPluginBoilerPlateFieldParameter extends IFieldParameter {
+    export interface IPluginUi_plugin_set_labels_on_saveFieldParameter extends IFieldParameter {
         /** field parameter placeholder*/
         fieldParameter: string;
     }
@@ -60,7 +60,7 @@ namespace BoilerPlate {
         /**  Field type id that will be use when rendering the data */
         fieldType: string,
         /**  default field Parameters*/
-        defaultParameters: IPluginBoilerPlateFieldParameter,
+        defaultParameters: IPluginUi_plugin_set_labels_on_saveFieldParameter,
         /**  description of  field  capabilities*/
         fieldConfigOptions: IFieldDescription,
         /**  Default value when none is present */

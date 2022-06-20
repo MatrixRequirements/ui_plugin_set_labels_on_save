@@ -1,45 +1,45 @@
 /// <reference path="api/Matrix.Labels.ts" />
 
 // eslint-disable-next-line no-unused-vars
-namespace BoilerPlate {
+namespace Ui_plugin_set_labels_on_save {
     
     export class Plugin implements IPlugin {
 
         // Define the plugin configuration in the following object. See interface comments for explanation
         static config: IPluginConfig = {
             customerSettingsPage: {
-                id: "BPP_projectsettings",
-                title: "BPP projectsettings page",
+                id: "U______projectsettings",
+                title: "U_____ projectsettings page",
                 enabled: true,
                 defaultSettings: {
                     content: "boiler plate",
                 },
-                settingName: "BPP_settings",
+                settingName: "U______settings",
                 help: "This is my help text",
                 helpUrl:"https://docs23.matrixreq.com"
             },
             projectSettingsPage: {
-                id: "BPP_projectsettings",
-                title:"BPP projectsettings page",
+                id: "U______projectsettings",
+                title:"U_____ projectsettings page",
                 enabled: true,
                 defaultSettings: {
                     content: "boiler plate",
                 },
-                settingName: "BPP_settings",
+                settingName: "U______settings",
                 help: "This is my help text",
                 helpUrl:"https://docs23.matrixreq.com"
             },
             menuToolItem: {
                 enabled: true,
-                title:"matrix-ui-plugin-boilerplate-menuitem",
+                title:"ui_plugin_set_labels_on_save-menuitem",
             },
             field: {
                 enabled: true,
-                fieldType: "matrix-ui-plugin-boilerplate",
+                fieldType: "ui_plugin_set_labels_on_save",
                 defaultValue: "Default value",
-                title: "matrix-ui-plugin-boilerplate-field",
+                title: "ui_plugin_set_labels_on_save-field",
                 fieldConfigOptions: {
-                    id: "matrix-ui-plugin-boilerplate",
+                    id: "ui_plugin_set_labels_on_save",
                     capabilities: {
                         canBePublished: false,
                         canBeReadonly: true,
@@ -50,16 +50,16 @@ namespace BoilerPlate {
                     },
                     class: "",
                     help: "",
-                    label: "matrix-ui-plugin-boilerplate-field",
+                    label: "ui_plugin_set_labels_on_save-field",
                 },
                 defaultParameters: {
-                    fieldParameter: "matrix-ui-plugin-boilerplate-field",
+                    fieldParameter: "ui_plugin_set_labels_on_save-field",
                 }
             },
             dashboard: {        
                 
-                id:"BPP",
-                title: "BPP dashboard page",
+                id:"U_____",
+                title: "U_____ dashboard page",
                 enabled: true,
                 icon: "fal fa-cog",
                 parent: "DASHBOARDS",
@@ -192,6 +192,6 @@ namespace BoilerPlate {
 
 // Register the plugin
 $(function () {
-    plugins.register(new BoilerPlate.Plugin());
+    plugins.register(new Ui_plugin_set_labels_on_save.Plugin());
 });
 

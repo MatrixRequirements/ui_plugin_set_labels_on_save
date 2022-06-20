@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-namespace BoilerPlate {
+namespace Ui_plugin_set_labels_on_save {
     /* server Setting page closure*/
     export function ServerSettingsPage(): IPluginSettingPage<IServerSettings> {
         
