@@ -1,5 +1,8 @@
 /// <reference path="api/Matrix.Labels.ts" />
 
+interface IUi_plugin_set_labels_on_saveSetting {
+    dirtyLabel:string; // set that label to activate the plugin
+}
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_set_labels_on_save {
     
@@ -25,7 +28,7 @@ namespace Ui_plugin_set_labels_on_save {
                 defaultSettings: {
                     content: "boiler plate",
                 },
-                settingName: "U______settings",
+                settingName: "SetLabelOnSave",
                 help: "This is my help text",
                 helpUrl:"https://docs23.matrixreq.com"
             },
@@ -73,12 +76,40 @@ namespace Ui_plugin_set_labels_on_save {
         public isDefault = true;
         currentFolder: IItem;
         popupModeOrControl: boolean;
+        public projectSettings:IUi_plugin_set_labels_on_saveSetting;
 
         static PLUGIN_NAME = "<PLUGIN_NAME_PLACEHOLDER>";
         static PLUGIN_VERSION = "<PLUGIN_VERSION_PLACEHOLDER>";
 
         constructor() {
             console.debug(`Contructing ${Plugin.PLUGIN_NAME}`);
+            let that = this;
+            MR1.onAfterSave().subscribe( <any>this, function (event:IItemChangeEvent) { 
+        
+                return that.onAfterSave( event );
+            });
+        }
+
+
+        private onAfterSave( event:IItemChangeEvent ) {
+            let that = this;
+    
+            if (that.projectSettings) {
+                console.log( event )
+            }
+        }
+
+
+        initProject(project:string) {
+            let that = this;
+    
+            that.projectSettings = <IUi_plugin_set_labels_on_saveSetting>IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName);
+            if (that.projectSettings && !that.projectSettings.dirtyLabel) {
+                that.projectSettings = null; 
+            }
+            if( that.projectSettings && new LabelTools().getLabelNames().indexOf( that.projectSettings.dirtyLabel )==-1 ) {
+                console.log(`Label "${that.projectSettings.dirtyLabel}" is not defined`);
+            }
         }
 
         initItem(_item: IItem, _jui: JQuery) {
