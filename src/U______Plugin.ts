@@ -224,7 +224,7 @@ $(function () {
 });
 
 // Patch the Generic AdminPage needed for 2.3.3 and earlier
-if (GenericAdminPage && $("meta[name='mx-version']").attr('content').indexOf("-")==-1) {
+if (window["GenericAdminPage"] && $("meta[name='mx-version']").attr('content').indexOf("-")==-1) {
     GenericAdminPage.prototype.getNode = function () {
         if (this.page.getNode)
             return this.page.getNode();
