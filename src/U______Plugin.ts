@@ -164,10 +164,11 @@ namespace Ui_plugin_set_labels_on_save {
             if (!Plugin.config.projectSettingsPage.enabled)
                 return [];
             else
-                return [
+                return [<ISettingPage>
                     {
                         id: Plugin.config.projectSettingsPage.id,
                         title: Plugin.config.projectSettingsPage.title,
+                        type:Plugin.config.projectSettingsPage.id,
                         render: (_ui: JQuery) => {
                             pbpi.renderSettingPage();
                         },
@@ -182,10 +183,10 @@ namespace Ui_plugin_set_labels_on_save {
             if (!Plugin.config.customerSettingsPage.enabled)
                 return [];
             else
-                return [
-                    {
+                return [<ISettingPage> {
                         id: Plugin.config.customerSettingsPage.id,
                         title: Plugin.config.customerSettingsPage.title,
+                         type:Plugin.config.projectSettingsPage.id,
                         render: (_ui: JQuery) => {
                             pbpi.renderSettingPage();
                         },
