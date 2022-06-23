@@ -1,16 +1,20 @@
-/// <reference path="api/Matrix.Labels.ts" />
+/// <reference path="./api/Matrix.Labels.ts" />
+/// <reference path="./api/PlugInCore.ts" />
 
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_set_labels_on_save {
     
-    export class Plugin implements IPlugin {
+    export class Plugin extends PluginCore {
 
         // Define the plugin configuration in the following object. See interface comments for explanation
+
+        static pluginDisplayName = "Set Labels on Save";
+
         static config: IPluginConfig = {
             customerSettingsPage: {
                 id: "U______projectsettings",
                 title: "U_____ projectsettings page",
-                enabled: true,
+                enabled: false,
                 defaultSettings: {
                     content: "boiler plate",
                 },
@@ -20,7 +24,7 @@ namespace Ui_plugin_set_labels_on_save {
             },
             projectSettingsPage: {
                 id: "ProjectSettingSetLabelOnSave",
-                title:"Set Labels on Save",
+                title:Plugin.pluginDisplayName,
                 enabled: true,
                 defaultSettings: {
                     dirtyLabel: "",
@@ -68,36 +72,30 @@ namespace Ui_plugin_set_labels_on_save {
             }
         };
 
-        /* DON'T CHANGE ANYTHING BELOW UNLESS YOU KNOW WHAT YOU ARE DOING */
-
-        public isDefault = true;
-        currentFolder: IItem;
-        popupModeOrControl: boolean;
-        public projectSettings:IProjectSettings;
-
-        static PLUGIN_NAME = "<PLUGIN_NAME_PLACEHOLDER>";
-        static PLUGIN_VERSION = "<PLUGIN_VERSION_PLACEHOLDER>";
-
+        /**
+         * the constructor is loaded once after all the source code is loaded by the browser. Nothing is known about the instance, project, user etc.
+         * You can use it to initialize things like callbacks after item changes
+         */
         constructor() {
-            console.debug(`Contructing ${Plugin.PLUGIN_NAME}`);
-            const that = this;// eslint-disable-line
+            super();
+            // ---------- my own code  ------
+            let that = this; // eslint-disable-line
+            
             MR1.onAfterSave().subscribe( <any>this, function (event:IItemChangeEvent) { // eslint-disable-line
         
                 return that.onAfterSave( event );
             });
+            // ---------- my own code  ------
         }
 
-
-        private onAfterSave( event:IItemChangeEvent ) {
-            const that = this;// eslint-disable-line
-    
-            if (that.projectSettings) {
-                console.log( event )
-            }
-        }
-
-
-        initProject(project:string) {// eslint-disable-line
+        /**
+         * This method is called after a project has been selected/initialized. 
+         * At the time it is called, all project settings, categories etc are defined.
+         * 
+         * @param project // id of the loaded project
+         */
+        onInitProject(project:string) {// eslint-disable-line
+            // ---------- my own code  ------
             const that = this;// eslint-disable-line
     
             that.projectSettings = <IProjectSettings>IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName);
@@ -105,116 +103,29 @@ namespace Ui_plugin_set_labels_on_save {
                 that.projectSettings = null; 
             }
             if( that.projectSettings && new LabelTools().getLabelNames().indexOf( that.projectSettings.dirtyLabel )==-1 ) {
-                console.log(`Label "${that.projectSettings.dirtyLabel}" is not defined`);
+                that.projectSettings = null; 
+                console.log(`${Plugin.pluginDisplayName} Label "${that.projectSettings.dirtyLabel}" is not defined`);
             }
+            // ---------- my own code  ------
         }
 
-        initItem(_item: IItem, _jui: JQuery) {
-            if (_item.id.indexOf("F-") == 0) {
-                this.currentFolder = _item;
-                this.popupModeOrControl = true;
-            } else {
-                this.currentFolder = undefined;
-                this.popupModeOrControl = false;
+        /** this method is called just before the rendering of an item is done
+        * It is also called when opening the create item dialog.
+        * 
+        * @param _item: the item which is being loaded in the UI 
+        */
+        onInitItem(_item: IItem) {
+             
+        }
+
+
+        // ---------- my own code  ------ 
+        private onAfterSave( event:IItemChangeEvent ) {
+            const that = this;// eslint-disable-line
+    
+            if (that.projectSettings) {
+                console.log( event )
             }
-        }
-        static canBeDisplay(_cat: string): boolean {
-            return true;
-        }
-
-        updateMenu(ul: JQuery, _hook: number) {
-            if (Plugin.config.menuToolItem.enabled) {
-                const li = $(`<li><a>${Plugin.config.menuToolItem.title}</a></li>`).on("click", () => {
-                    const m = new Tool();
-                    m.menuClicked();
-                });
-                ul.append(li);
-          }  
-        }
-        supportsControl(fieldType: string): boolean {
-            return fieldType == Plugin.config.field.fieldType && Plugin.config.field.enabled;
-        }
-        createControl(ctrlObj: JQuery, settings: IBaseControlOptions) {
-            if (settings && settings.fieldType == Plugin.config.field.fieldType &&  Plugin.config.field.enabled){
-                const baseControl = new Control(ctrlObj);
-                ctrlObj.getController = () => {
-                    return baseControl;
-                };
-                baseControl.init(<IControlOptions>settings);
-            }
-        }
-
-        getFieldConfigOptions(): IFieldDescription[] {
-            return [
-                Plugin.config.field.fieldConfigOptions
-            ];
-        }
-        isEnabled() {
-            return true;
-        }
-        getPluginName() {
-            return Plugin.PLUGIN_NAME;
-        }
-
-        getPluginVersion() {
-            return Plugin.PLUGIN_VERSION;
-        }
-        getProjectSettingPages(): ISettingPage[] {
-            const pbpi = ProjectSettingsPage();
-            if (!Plugin.config.projectSettingsPage.enabled)
-                return [];
-            else
-                return [<ISettingPage>
-                    {
-                        id: Plugin.config.projectSettingsPage.id,
-                        title: Plugin.config.projectSettingsPage.title,
-                        type:Plugin.config.projectSettingsPage.id,
-                        render: (_ui: JQuery) => {
-                            pbpi.renderSettingPage();
-                        },
-                        saveAsync: () => {
-                            return pbpi.saveAsync();
-                        },
-                    },
-                ];
-        }
-        getCustomerSettingPages(): ISettingPage[] {
-            const pbpi = ServerSettingsPage();
-            if (!Plugin.config.customerSettingsPage.enabled)
-                return [];
-            else
-                return [<ISettingPage> {
-                        id: Plugin.config.customerSettingsPage.id,
-                        title: Plugin.config.customerSettingsPage.title,
-                         type:Plugin.config.projectSettingsPage.id,
-                        render: (_ui: JQuery) => {
-                            pbpi.renderSettingPage();
-                        },
-                        saveAsync: () => {
-                            return pbpi.saveAsync();
-                        },
-                    },
-                ];
-        }
-
-        getProjectPages(): IProjectPageParam[] {
-            const pages: IProjectPageParam[] = [];
-            if (Plugin.config.dashboard.enabled) {
-                pages.push({
-                    id: Plugin.config.dashboard.id,
-                    title: Plugin.config.dashboard.title,
-                    folder: Plugin.config.dashboard.parent,
-                    order: Plugin.config.dashboard.order,
-                    icon: Plugin.config.dashboard.icon,
-                    usesFilters: true,
-                    render: (_options: IPluginPanelOptions) => {
-                        const gd = new DashboardPage();
-                        gd.renderProjectPage();
-                    },
-                });
-           }
-               
-            return pages;
         }
     }
 }
