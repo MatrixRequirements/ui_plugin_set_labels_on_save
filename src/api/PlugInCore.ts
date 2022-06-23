@@ -23,7 +23,7 @@ namespace Ui_plugin_set_labels_on_save {
             this.onInitProject(project);
         }
         // to be overwritten
-        abstract onInitProject(project:string);
+        abstract onInitProject(project:string); // eslint-disable-line
         
 
         initItem(_item: IItem, _jui: JQuery) {

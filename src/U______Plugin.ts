@@ -115,7 +115,7 @@ namespace Ui_plugin_set_labels_on_save {
         * @param _item: the item which is being loaded in the UI 
         */
         onInitItem(_item: IItem) {
-             
+             // put in code to be run before loading item
         }
 
 
