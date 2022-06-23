@@ -222,19 +222,3 @@ namespace Ui_plugin_set_labels_on_save {
 $(function () {
     plugins.register(new Ui_plugin_set_labels_on_save.Plugin());
 });
-
-// Patch the Generic AdminPage needed for 2.3.3 and earlier
-if (window["GenericAdminPage"] && $("meta[name='mx-version']").attr('content').indexOf("-")==-1) {
-    GenericAdminPage.prototype.getNode = function () {
-        if (this.page.getNode)
-            return this.page.getNode();
-        else
-            return {
-                type: this.page.type,
-                title: this.page.title,
-                id: this.pageId,
-                icon: "admin/setting.png",
-                children: []
-            };
-    }
-}
