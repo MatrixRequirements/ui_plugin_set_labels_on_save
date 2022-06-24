@@ -3,7 +3,7 @@ namespace Ui_plugin_set_labels_on_save{
     
     export class Tool{
         
-        menuClicked() {
+        menuClicked(itemId:string) {
             /* Insert code here */
             alert(Plugin.config.menuToolItem.title)
         }

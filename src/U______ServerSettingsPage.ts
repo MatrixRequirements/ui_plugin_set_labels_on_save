@@ -15,7 +15,7 @@ namespace Ui_plugin_set_labels_on_save {
             return $(`
                 <div class="panel-body-v-scroll fillHeight">
                     <div>
-                        This is my customer settings page : ${settings.content}
+                        This is my customer settings page : ${settings.myServerSetting}
                     </div>
 
                 </div>

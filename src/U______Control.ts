@@ -7,11 +7,7 @@ namespace Ui_plugin_set_labels_on_save{
         private lastValueChanged:number;
         private _editor:JQuery;
         private doesRequireContent = false;
-       private defaultValue = Plugin.config.field.defaultValue; 
-       
-
-       
-      
+        private defaultValue = Plugin.config.field.defaultValue; 
        
         createEditorFromDOM(): JQuery {
             return $(`<div>
@@ -65,7 +61,7 @@ namespace Ui_plugin_set_labels_on_save{
           
             ctrlContainer.append(this._editor);
             
-            this._editor.val(this.settings.fieldValue);
+            this._editor.val(<string | number | string[]>this.settings.fieldValue);
     
             // remove mouseout to avoid frequent changes change
             this._editor.change( ()=> {

@@ -16,7 +16,7 @@ namespace Ui_plugin_set_labels_on_save {
                 title: "U_____ projectsettings page",
                 enabled: false,
                 defaultSettings: {
-                    content: "boiler plate",
+                    myServerSetting: "boiler plate",
                 },
                 settingName: "U______settings",
                 help: "This is my help text",
@@ -57,7 +57,7 @@ namespace Ui_plugin_set_labels_on_save {
                     label: "ui_plugin_set_labels_on_save-field",
                 },
                 defaultParameters: {
-                    fieldParameter: "ui_plugin_set_labels_on_save-field",
+                    myParameter: "ui_plugin_set_labels_on_save-field",
                 }
             },
             dashboard: {        
@@ -94,19 +94,19 @@ namespace Ui_plugin_set_labels_on_save {
          * 
          * @param project // id of the loaded project
          */
-        onInitProject(project:string) {// eslint-disable-line
-            // ---------- my own code  ------
-            const that = this;// eslint-disable-line
+        onInitProject(project:string) {
+            const that = this;
     
-            that.projectSettings = <IProjectSettings>IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName);
-            if (that.projectSettings && !that.projectSettings.dirtyLabel) {
-                that.projectSettings = null; 
+            const psp = ProjectSettingsPage();
+            if (!psp.settings.dirtyLabel) {
+                that.enabledInContext = false;
             }
-            if( that.projectSettings && new LabelTools().getLabelNames().indexOf( that.projectSettings.dirtyLabel )==-1 ) {
-                that.projectSettings = null; 
-                console.log(`${Plugin.pluginDisplayName} Label "${that.projectSettings.dirtyLabel}" is not defined`);
+            else if( new LabelTools().getLabelNames().indexOf( psp.settings.dirtyLabel )==-1 ) {
+                that.enabledInContext = false;
+                console.log(`${Plugin.pluginDisplayName} Label "${psp.settings.dirtyLabel}" is not defined`);
+            } else {
+                that.enabledInContext = true;
             }
-            // ---------- my own code  ------
         }
 
         /** this method is called just before the rendering of an item is done
@@ -114,8 +114,8 @@ namespace Ui_plugin_set_labels_on_save {
         * 
         * @param _item: the item which is being loaded in the UI 
         */
-        onInitItem(_item: IItem) {
-             // put in code to be run before loading item
+        onInitItem(item: IItem) {
+            // add your code here
         }
 
 
@@ -123,9 +123,9 @@ namespace Ui_plugin_set_labels_on_save {
         private onAfterSave( event:IItemChangeEvent ) {
             const that = this;// eslint-disable-line
     
-            if (that.projectSettings) {
+            //if (that.projectSettings) {
                 console.log( event )
-            }
+            //}
         }
     }
 }
