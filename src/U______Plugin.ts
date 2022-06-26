@@ -10,6 +10,7 @@ namespace Ui_plugin_set_labels_on_save {
 
         static pluginDisplayName = "Set Labels on Save";
         protected projectSettings:IProjectSettings;
+        protected categories:string[];
 
         static config: IPluginConfig = {
             customerSettingsPage: {
@@ -107,6 +108,7 @@ namespace Ui_plugin_set_labels_on_save {
                 that.enabledInContext = false;
                 console.log(`${Plugin.pluginDisplayName} Label "${this.projectSettings.dirtyLabel}" is not defined`);
             } else {
+                this.categories = new LabelTools().getLabelDefinitions(null).filter( label => label.label == "dirty")[0].categories;
                 that.enabledInContext = true;
             }
         }
@@ -126,9 +128,28 @@ namespace Ui_plugin_set_labels_on_save {
             const that = this;
     
             if (that.enabledInContext) {
-                console.log( event )
+                // get all downlinks which have the dirty label defined
+                let downs = matrixApplicationUI.currentItem.downLinks.map( down => down.to).filter( down => that.categories.indexOf( ml.Item.parseRef(down).type) != -1);
+                that.setDirty( downs );
             }
         }
+
+        private async setDirty( itemIds:string[] ) {
+            for (let itemId of itemIds) {
+                await this.setDirtyLabel(  itemId );
+            }
+        }
+        private async setDirtyLabel( itemId:string ) {
+            let res = $.Deferred();
+            
+            let update = {id:itemId , onlyThoseFields:1,onlyThoseLabels:1, labels:this.projectSettings.dirtyLabel};
+           
+            app.updateItemInDBAsync(update, "dirty (parent change)" ).always( () => {
+                res.resolve();
+            });
+            return res;
+        }
+        
     }
 }
 
