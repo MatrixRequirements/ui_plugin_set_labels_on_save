@@ -9,6 +9,7 @@ namespace Ui_plugin_set_labels_on_save {
         // Define the plugin configuration in the following object. See interface comments for explanation
 
         static pluginDisplayName = "Set Labels on Save";
+        protected projectSettings:IProjectSettings;
 
         static config: IPluginConfig = {
             customerSettingsPage: {
@@ -98,12 +99,16 @@ namespace Ui_plugin_set_labels_on_save {
             const that = this;
     
             const psp = ProjectSettingsPage();
-            if (!psp.settings.dirtyLabel) {
+
+
+            this.projectSettings = <IProjectSettings>IC.getSettingJSON( Plugin.config.projectSettingsPage.settingName, Plugin.config.projectSettingsPage.defaultSettings );
+
+            if (!this.projectSettings.dirtyLabel) {
                 that.enabledInContext = false;
             }
-            else if( new LabelTools().getLabelNames().indexOf( psp.settings.dirtyLabel )==-1 ) {
+            else if( new LabelTools().getLabelNames().indexOf(this.projectSettings.dirtyLabel )==-1 ) {
                 that.enabledInContext = false;
-                console.log(`${Plugin.pluginDisplayName} Label "${psp.settings.dirtyLabel}" is not defined`);
+                console.log(`${Plugin.pluginDisplayName} Label "${this.projectSettings.dirtyLabel}" is not defined`);
             } else {
                 that.enabledInContext = true;
             }
