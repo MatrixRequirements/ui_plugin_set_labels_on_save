@@ -98,9 +98,6 @@ namespace Ui_plugin_set_labels_on_save {
         onInitProject(project:string) {
             const that = this;
     
-            const psp = ProjectSettingsPage();
-
-
             this.projectSettings = <IProjectSettings>IC.getSettingJSON( Plugin.config.projectSettingsPage.settingName, Plugin.config.projectSettingsPage.defaultSettings );
 
             if (!this.projectSettings.dirtyLabel) {
