@@ -127,6 +127,7 @@ namespace Ui_plugin_set_labels_on_save {
         private onAfterSave( event:IItemChangeEvent ) {
             const that = this;
     
+            console.log( event );
             if (that.enabledInContext) {
                 // get all downlinks which have the dirty label defined
                 let downs = matrixApplicationUI.currentItem.downLinks.map( down => down.to).filter( down => that.categories.indexOf( ml.Item.parseRef(down).type) != -1);
