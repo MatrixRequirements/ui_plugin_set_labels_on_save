@@ -38,7 +38,7 @@ namespace Ui_plugin_set_labels_on_save {
                 title:"ui_plugin_set_labels_on_save-menuitem",
             },
             field: {
-                enabled: true,
+                enabled: false,
                 fieldType: "ui_plugin_set_labels_on_save",
                 defaultValue: "Default value",
                 title: "ui_plugin_set_labels_on_save-field",
@@ -64,7 +64,7 @@ namespace Ui_plugin_set_labels_on_save {
                 
                 id:"U_____",
                 title: "U_____ dashboard page",
-                enabled: true,
+                enabled: false,
                 icon: "fal fa-cog",
                 parent: "DASHBOARDS",
                 usefilter: true,
@@ -121,11 +121,11 @@ namespace Ui_plugin_set_labels_on_save {
 
         // ---------- my own code  ------ 
         private onAfterSave( event:IItemChangeEvent ) {
-            const that = this;// eslint-disable-line
+            const that = this;
     
-            //if (that.projectSettings) {
+            if (that.enabledInContext) {
                 console.log( event )
-            //}
+            }
         }
     }
 }

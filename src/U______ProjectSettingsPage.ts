@@ -13,7 +13,6 @@ namespace Ui_plugin_set_labels_on_save {
             
             return $(`
                 <div class="panel-body-v-scroll fillHeight">
-                    This is my content : ${settings.dirtyLabel}
                 </div>
                 `);
         };
@@ -50,10 +49,15 @@ namespace Ui_plugin_set_labels_on_save {
 
             const settings = IC.getSettingJSON(Plugin.config.projectSettingsPage.settingName, {});
             self.settingsOriginal = { ...self.settings, ...settings };
-            if (!self.settingsChanged)
+            if (!self.settingsChanged) {
                 self.settingsChanged = { ...self.settings, ...settings };
-            app.itemForm.append(self.getSettingsDOM(self.settingsChanged));
-            
+            }
+
+            const dom = self.getSettingsDOM(self.settingsChanged);
+            app.itemForm.append(dom);
+
+            const labels = Labels.getLabelOptions(true);
+            ml.UI.addDropdownToValue( dom, "Dirty Label",self.settingsChanged,"dirtyLabel", labels, false, false, self.paramChanged, "select a label");
         };
 
         self.paramChanged = () => {
