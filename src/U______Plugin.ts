@@ -139,7 +139,7 @@ namespace Ui_plugin_set_labels_on_save {
                     if (event.after.title != event.before.title) {
                         contentChanged = true;
                     }
-                    let fieldIs = IC.getFields(event.after.id).map( field => field.id);
+                    let fieldIs = IC.getFields(ml.Item.parseRef(event.after.id).type).map( field => field.id);
                     for (let field of fieldIs) {
                         if (!event.before[field] && !event.after[field]) {
                             // all good (both are not initialized/empty)
