@@ -127,43 +127,48 @@ namespace Ui_plugin_set_labels_on_save {
         private onAfterSave( event:IItemChangeEvent ) {
             const that = this;
     
-            console.log( event );
+            if (!that.enabledInContext) {
+                return;
+            }
+
             const after = event.after.labels?event.after.labels.split(","):[];
 
+            // special case that item dirty flag was toggled off.. in case nothing else changed return
             if (after.indexOf(this.projectSettings.dirtyLabel) == -1 &&
                 event.before.labels.indexOf(this.projectSettings.dirtyLabel) != -1) {
-                    // dirty label was toggled off
-                    let contentChanged = false;
+                
+                // dirty label was toggled off
+                let contentChanged = false;
 
-                    // check if some other relevant changes happened
-                    if (event.after.title != event.before.title) {
+                // check if some other relevant changes happened
+                if (event.after.title != event.before.title) {
+                    contentChanged = true;
+                }
+                let fieldIs = IC.getFields(ml.Item.parseRef(event.after.id).type).map( field => field.id);
+                for (let field of fieldIs) {
+                    if (!event.before[field] && !event.after[field]) {
+                        // all good (both are not initialized/empty)
+                    } else if (!event.before[field]) {
+                        contentChanged = true;
+                    } else if (!event.after[field]) {
+                        contentChanged = true;
+                    } else if (event.before[field]  != event.after[field]) {
                         contentChanged = true;
                     }
-                    let fieldIs = IC.getFields(ml.Item.parseRef(event.after.id).type).map( field => field.id);
-                    for (let field of fieldIs) {
-                        if (!event.before[field] && !event.after[field]) {
-                            // all good (both are not initialized/empty)
-                        } else if (!event.before[field]) {
-                            contentChanged = true;
-                        } else if (!event.after[field]) {
-                            contentChanged = true;
-                        } else if (event.before[field]  != event.after[field]) {
-                            contentChanged = true;
-                        }
-                    }
-
-                    if (!contentChanged) {
-                        // only labels were changed (and the dirty was unset)
-                        return;
-                    }
-                        
                 }
 
-            if (that.enabledInContext) {
-                // get all downlinks which have the dirty label defined
-                let downs = matrixApplicationUI.currentItem.downLinks.map( down => down.to).filter( down => that.categories.indexOf( ml.Item.parseRef(down).type) != -1);
-                that.setDirty( downs );
+                if (!contentChanged) {
+                    // only labels were changed (and the dirty was unset)
+                    return;
+                }
+                    
             }
+
+            
+            // get all downlinks which have the dirty label defined
+            let downs = matrixApplicationUI.currentItem.downLinks.map( down => down.to).filter( down => that.categories.indexOf( ml.Item.parseRef(down).type) != -1);
+            that.setDirty( downs );
+        
         }
 
         private async setDirty( itemIds:string[] ) {
