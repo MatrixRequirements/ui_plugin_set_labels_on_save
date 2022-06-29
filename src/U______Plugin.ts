@@ -139,39 +139,41 @@ namespace Ui_plugin_set_labels_on_save {
                 event.before.labels.indexOf(this.projectSettings.dirtyLabel) != -1) {
                 
                 // dirty label was toggled off
-                let contentChanged = false;
-
-                // check if some other relevant changes happened
-                if (event.after.title != event.before.title) {
-                    contentChanged = true;
-                }
-                let category = ml.Item.parseRef(event.after.id).type;
-                for (let fieldDef of IC.getFields(category)) {
-                    let fieldId = fieldDef.id;
-                    let fieldName = fieldDef.label.toLowerCase();
-                    if ( this.projectSettings.ignore[category] && this.projectSettings.ignore[category].filter( field => field.toLowerCase() == fieldName).length !=0) {
-                        // field should not trigger content changed
-                    } else {
-                        if (!event.before[fieldId] && !event.after[fieldId]) {
-                            // all good (both are not initialized/empty)
-                        } else if (!event.before[fieldId]) {
-                            contentChanged = true;
-                        } else if (!event.after[fieldId]) {
-                            contentChanged = true;
-                        } else if (event.before[fieldId]  != event.after[fieldId]) {
-                            contentChanged = true;
-                        }
-                    }
-                }
-
-                if (!contentChanged) {
-                    // only labels were changed (and the dirty was unset)
-                    return;
-                }
+                
                     
             }
 
-            
+            let contentChanged = false;
+
+            // check if some other relevant changes happened
+            if (event.after.title != event.before.title) {
+                contentChanged = true;
+            }
+            let category = ml.Item.parseRef(event.after.id).type;
+            for (let fieldDef of IC.getFields(category)) {
+                let fieldId = fieldDef.id;
+                let fieldName = fieldDef.label.toLowerCase();
+                if ( this.projectSettings.ignore[category] && this.projectSettings.ignore[category].filter( field => field.toLowerCase() == fieldName).length !=0) {
+                    // field should not trigger content changed
+                } else {
+                    if (!event.before[fieldId] && !event.after[fieldId]) {
+                        // all good (both are not initialized/empty)
+                    } else if (!event.before[fieldId]) {
+                        contentChanged = true;
+                    } else if (!event.after[fieldId]) {
+                        contentChanged = true;
+                    } else if (event.before[fieldId]  != event.after[fieldId]) {
+                        contentChanged = true;
+                    }
+                }
+            }
+
+            if (!contentChanged) {
+                // only labels were changed (and the dirty was unset)
+                return;
+            }
+
+
             // get all downlinks which have the dirty label defined
             let downs = matrixApplicationUI.currentItem.downLinks.map( down => down.to).filter( down => that.categories.indexOf( ml.Item.parseRef(down).type) != -1);
             that.setDirty( downs );
