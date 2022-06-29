@@ -30,6 +30,7 @@ namespace Ui_plugin_set_labels_on_save {
                 enabled: true,
                 defaultSettings: {
                     dirtyLabel: "",
+                    ignore:{}
                 },
                 settingName: "SetLabelOnSave",
                 help: "This is my help text",
@@ -144,16 +145,22 @@ namespace Ui_plugin_set_labels_on_save {
                 if (event.after.title != event.before.title) {
                     contentChanged = true;
                 }
-                let fieldIs = IC.getFields(ml.Item.parseRef(event.after.id).type).map( field => field.id);
-                for (let field of fieldIs) {
-                    if (!event.before[field] && !event.after[field]) {
-                        // all good (both are not initialized/empty)
-                    } else if (!event.before[field]) {
-                        contentChanged = true;
-                    } else if (!event.after[field]) {
-                        contentChanged = true;
-                    } else if (event.before[field]  != event.after[field]) {
-                        contentChanged = true;
+                let category = ml.Item.parseRef(event.after.id).type;
+                for (let fieldDef of IC.getFields(category)) {
+                    let fieldId = fieldDef.id;
+                    let fieldName = fieldDef.label.toLowerCase();
+                    if ( this.projectSettings.ignore[category] && this.projectSettings.ignore[category].filter( field => field.toLowerCase() == fieldName).length !=0) {
+                        // field should not trigger content changed
+                    } else {
+                        if (!event.before[fieldId] && !event.after[fieldId]) {
+                            // all good (both are not initialized/empty)
+                        } else if (!event.before[fieldId]) {
+                            contentChanged = true;
+                        } else if (!event.after[fieldId]) {
+                            contentChanged = true;
+                        } else if (event.before[fieldId]  != event.after[fieldId]) {
+                            contentChanged = true;
+                        }
                     }
                 }
 

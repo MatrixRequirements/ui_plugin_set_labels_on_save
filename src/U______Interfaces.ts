@@ -19,6 +19,8 @@ namespace Ui_plugin_set_labels_on_save {
     export interface IProjectSettings {
         /** set that label to activate the plugin */
         dirtyLabel:string; 
+        /** ignore list */
+        ignore:IStringStringArrayMap;
     }
   
 }
