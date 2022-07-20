@@ -138,9 +138,7 @@ namespace Ui_plugin_set_labels_on_save {
             if (after.indexOf(this.projectSettings.dirtyLabel) == -1 &&
                 event.before.labels.indexOf(this.projectSettings.dirtyLabel) != -1) {
                 
-                // dirty label was toggled off
-                
-                    
+                // dirty label was toggled off    
             }
 
             let contentChanged = false;
@@ -176,16 +174,31 @@ namespace Ui_plugin_set_labels_on_save {
 
             // get all downlinks which have the dirty label defined
             let downs = matrixApplicationUI.currentItem.downLinks.map( down => down.to).filter( down => that.categories.indexOf( ml.Item.parseRef(down).type) != -1);
-            that.setDirty( downs );
+            that.setDirty( downs, event );
         
         }
 
-        private async setDirty( itemIds:string[] ) {
-            for (let itemId of itemIds) {
-                await this.setDirtyLabel(  itemId );
+        private async setDirty( itemIds:string[] , event:IItemChangeEvent) {
+            if (itemIds.length==0) {
+                return;
             }
+            // get original comment
+            let original = matrixSession.getComment();
+            matrixSession.getCommentAsync().done( async (comment) => {
+
+                // to store in comment what version change was
+                let postFix = ` (${event.before.id} v${event.before.maxVersion}->v${event.after.maxVersion})`;
+                matrixSession.setComment( comment + postFix);
+                //
+                for (let itemId of itemIds) {
+                    await this.setDirtyLabel(  itemId, postFix );
+                }
+                // back to original comment
+                matrixSession.setComment( original);
+            });
         }
-        private async setDirtyLabel( itemId:string ) {
+        
+        private async setDirtyLabel( itemId:string, postFix:string ) {
             let res = $.Deferred();
             
             let update = {id:itemId , onlyThoseFields:1,onlyThoseLabels:1, labels:this.projectSettings.dirtyLabel};
@@ -193,6 +206,7 @@ namespace Ui_plugin_set_labels_on_save {
             app.updateItemInDBAsync(update, "dirty (parent change)" ).always( () => {
                 res.resolve();
             });
+        
             return res;
         }
         
