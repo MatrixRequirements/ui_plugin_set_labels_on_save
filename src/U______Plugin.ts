@@ -187,7 +187,8 @@ namespace Ui_plugin_set_labels_on_save {
             matrixSession.getCommentAsync().done( async (comment) => {
 
                 // to store in comment what version change was
-                let postFix = ` (${event.before.id} v${event.before.maxVersion}->v${event.after.maxVersion})`;
+                let postVersion = event.after.maxVersion?event.after.maxVersion:(event.before.maxVersion+1);
+                let postFix = ` (${event.before.id} v${event.before.maxVersion}->v${postVersion})`;
                 matrixSession.setComment( comment + postFix);
                 //
                 for (let itemId of itemIds) {
