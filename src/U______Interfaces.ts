@@ -21,6 +21,8 @@ namespace Ui_plugin_set_labels_on_save {
         dirtyLabel:string; 
         /** ignore list */
         ignore:IStringStringArrayMap;
+        /** allow to hide the dirty icon */
+        hideIcon?:boolean
     }
   
 }

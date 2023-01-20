@@ -112,6 +112,11 @@ namespace Ui_plugin_set_labels_on_save {
                 this.categories = new LabelTools().getLabelDefinitions(null).filter( label => label.label == this.projectSettings.dirtyLabel)[0].categories;
                 that.enabledInContext = true;
             }
+            $("#hideDirtyIcon").remove();
+            if (that.enabledInContext && that.projectSettings.hideIcon) {
+                $("head").append(`<style id="hideDirtyIcon" type="text/css" rel="stylesheet">.datedLink {display:none}</style>`);
+            }
+            
         }
 
         /** this method is called just before the rendering of an item is done
