@@ -109,7 +109,7 @@ namespace Ui_plugin_set_labels_on_save {
                 that.enabledInContext = false;
                 console.log(`${Plugin.pluginDisplayName} Label "${this.projectSettings.dirtyLabel}" is not defined`);
             } else {
-                this.categories = new LabelTools().getLabelDefinitions(null).filter( label => label.label == "dirty")[0].categories;
+                this.categories = new LabelTools().getLabelDefinitions(null).filter( label => label.label == this.projectSettings.dirtyLabel)[0].categories;
                 that.enabledInContext = true;
             }
         }
