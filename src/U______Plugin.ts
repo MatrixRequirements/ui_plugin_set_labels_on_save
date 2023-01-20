@@ -114,7 +114,7 @@ namespace Ui_plugin_set_labels_on_save {
             }
             $("#hideDirtyIcon").remove();
             if (that.enabledInContext && that.projectSettings.hideIcon) {
-                $("head").append(`<style id="hideDirtyIcon" type="text/css" rel="stylesheet">.datedLink {display:none}</style>`);
+                $("head").append(`<style id="hideDirtyIcon" type="text/css" rel="stylesheet">.datedLink {display:none !important;}</style>`);
             }
             
         }
